@@ -20,7 +20,9 @@
      single layer — no other file talks to the backend.
      ===================================================== */
   var API_URL = 'http://localhost:5000/api/analyze';
-  var MOCK_MODE = true;
+  // ── Flip this back to `true` for a frontend-only demo (no backend).
+  //    When `false`, the uploaded X-ray is sent to the real Flask backend.
+  const MOCK_MODE = false;
   var MAX_FILE_MB = 10;
   window.SXAPI = window.SXAPI || {};
   window.SXAPI.config = { API_URL: API_URL, MOCK_MODE: MOCK_MODE, MAX_FILE_MB: MAX_FILE_MB };
@@ -51,7 +53,18 @@
     } catch (e) {
       throw new Error('NETWORK');
     }
-    if (!res.ok) throw new Error('HTTP_' + res.status);
+    if (!res.ok) {
+      // Try to surface the backend's own error message (e.g. the JSON
+      // `{ "error": "..." }` returned by Flask) instead of a bare status.
+      var backendMsg = '';
+      try {
+        var eb = await res.json();
+        backendMsg = eb && (eb.error || eb.message) ? String(eb.error || eb.message) : '';
+      } catch (e2) {}
+      var httpErr = new Error('HTTP_' + res.status);
+      httpErr.backendMessage = backendMsg;
+      throw httpErr;
+    }
     var json;
     try { json = await res.json(); } catch (e) { throw new Error('BAD_JSON'); }
     var mapped = mapApiResult(json);
@@ -87,6 +100,72 @@
     };
   }
   window.SXAPI.mapApiResult = mapApiResult;
+
+  /* =====================================================
+     AI MODEL HEALTH CHECK — GET /api/health
+     Powers the "● AI MODEL ONLINE / OFFLINE" indicator.
+     It reports the real backend state and never fakes it.
+     ===================================================== */
+  function healthUrl() {
+    return String(API_URL || '').replace(/\/api\/analyze\/?$/, '/api/health');
+  }
+  window.SXAPI.healthUrl = healthUrl;
+  window.SXAPI.checkHealth = function () {
+    return new Promise(function (resolve) {
+      var done = false;
+      function settle(v) { if (!done) { done = true; resolve(v); } }
+      var ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+      var timer = setTimeout(function () {
+        if (ctrl) ctrl.abort();
+        settle({ online: false, model_loaded: false });
+      }, 4000);
+      var opts = { method: 'GET', headers: { 'Accept': 'application/json' } };
+      if (ctrl) opts.signal = ctrl.signal;
+      fetch(healthUrl(), opts).then(function (r) {
+        clearTimeout(timer);
+        if (!r.ok) return settle({ online: false, model_loaded: false });
+        return r.json().then(function (j) {
+          settle({ online: true, model_loaded: !!(j && j.model_loaded) });
+        }).catch(function () { settle({ online: true, model_loaded: false }); });
+      }).catch(function () { clearTimeout(timer); settle({ online: false, model_loaded: false }); });
+    });
+  };
+
+  function paintHealth(el, state) {
+    var text = el.querySelector('[data-health-text]');
+    el.classList.remove('h-online', 'h-offline', 'h-checking');
+    if (state.online && state.model_loaded) {
+      el.classList.add('h-online');
+      if (text) text.textContent = 'AI MODEL ONLINE';
+      el.title = 'Backend reachable · model loaded';
+    } else if (state.online && !state.model_loaded) {
+      el.classList.add('h-offline');
+      if (text) text.textContent = 'AI MODEL OFFLINE';
+      el.title = 'Backend reachable · model NOT loaded — check the Flask console';
+    } else {
+      el.classList.add('h-offline');
+      if (text) text.textContent = 'AI MODEL OFFLINE';
+      el.title = 'Backend unreachable — start it with: python backend/app.py';
+    }
+  }
+  function initHealthIndicators() {
+    var els = SX.qsa('[data-health]');
+    if (!els.length) return;
+    function refresh() {
+      els.forEach(function (el) {
+        el.classList.remove('h-online', 'h-offline');
+        el.classList.add('h-checking');
+        var text = el.querySelector('[data-health-text]');
+        if (text) text.textContent = 'CHECKING…';
+      });
+      window.SXAPI.checkHealth().then(function (state) {
+        els.forEach(function (el) { paintHealth(el, state); });
+      });
+    }
+    refresh();
+    setInterval(refresh, 20000); // re-poll every 20s
+  }
+  document.addEventListener('DOMContentLoaded', initHealthIndicators);
 
   /* =====================================================
      MOCK ENGINE — used only when MOCK_MODE = true.
@@ -604,7 +683,7 @@
         var result = await SXA.analyzeXray(file, patientData);
 
         // persist the analysis record (images stay in-memory / come from backend)
-        SX.store.add({
+        var rec = {
           id: result.analysisId,
           patientName: patientData.name,
           patientId: patientData.id,
@@ -615,7 +694,18 @@
           confidence: result.confidence,
           status: 'COMPLETE',
           notes: patientData.notes
-        });
+        };
+        // Persist the REAL backend image URLs into the history store so the
+        // report page, dashboard and PDF all still show the actual X-ray and
+        // Grad-CAM after a page reload. (Mock-mode data URLs stay in-memory
+        // only, keeping the existing demo behaviour and localStorage lean.)
+        if (result.originalImage && !/^data:/.test(result.originalImage)) {
+          rec.originalImage = result.originalImage;
+        }
+        if (result.heatmapImage && !/^data:/.test(result.heatmapImage)) {
+          rec.heatmapImage = result.heatmapImage;
+        }
+        SX.store.add(rec);
         if (result.originalImage || result.heatmapImage) {
           SXA.setLiveImages(result.analysisId, { original: result.originalImage, heatmap: result.heatmapImage });
         }
@@ -630,15 +720,17 @@
       } catch (err) {
         closeLoader(false);
         var code = err && err.message ? err.message : 'UNKNOWN';
+        var backendMsg = err && err.backendMessage ? err.backendMessage : '';
         if (code === 'NETWORK') {
-          SX.toast('Unable to connect to Smart Xray AI server', 'error', 'Please check that the Python backend is running.');
+          SX.toast('Unable to connect to Smart Xray AI server', 'error', 'Please make sure the Flask backend is running.');
           showErr('Unable to reach the AI backend.',
             'Smart Xray could not connect to <code>' + SX.esc(SXA.config.API_URL) + '</code>. ' +
             'Make sure your Python/Flask app is running, then press Analyze again.');
         } else if (code.indexOf('HTTP_') === 0) {
-          SX.toast('AI server error (' + code.replace('HTTP_', '') + ')', 'error', 'The backend responded with an error status.');
-          showErr('The AI backend returned an error.',
-            'Status <code>' + SX.esc(code.replace('HTTP_', '')) + '</code>. Check the Python console for model errors and retry.');
+          var status = code.replace('HTTP_', '');
+          SX.toast('AI server error (' + status + ')', 'error', backendMsg || 'The backend responded with an error status.');
+          showErr(backendMsg || 'The AI backend returned an error.',
+            'Status <code>' + SX.esc(status) + '</code>. Check the Python console for model errors and retry.');
         } else if (code === 'BAD_JSON') {
           SX.toast('Invalid API response', 'error', 'The backend did not return valid JSON.');
           showErr('Invalid API response.', 'The backend returned a non-JSON payload. Expected a JSON object from <code>POST /api/analyze</code>.');

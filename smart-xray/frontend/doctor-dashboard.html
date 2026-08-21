@@ -306,6 +306,10 @@
               <span><b>Mode</b><small>MOCK_MODE — swap to false to call the live model.</small></span>
               <span class="mode-pill" id="mock-pill"><i></i><span id="mock-pill-text">MOCK MODE</span></span>
             </div>
+            <div class="setting-row">
+              <span><b>Model status</b><small>Live check of <span class="mono">GET /api/health</span> on your backend.</small></span>
+              <span class="health-chip h-checking" data-health><i></i><span data-health-text>CHECKING…</span></span>
+            </div>
             <div class="setting-row" style="display:block">
               <span style="display:block;margin-bottom:9px"><b>Endpoint</b>
                 <code class="api-code" id="api-url">http://localhost:5000/api/analyze</code>
