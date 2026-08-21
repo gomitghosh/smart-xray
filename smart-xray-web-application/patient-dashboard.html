@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Health — Smart Xray</title>
+<link rel="icon" type="image/svg+xml" href="assets/logo/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<!-- jsPDF (CDN) — used to generate downloadable PDF reports -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body data-page="patient-dashboard" data-protect="patient">
+<a class="skip-link" href="#pd-content">Skip to content</a>
+<div class="app">
+  <div class="main" style="margin-left:0">
+    <header class="topbar">
+      <div class="tb-brand">
+        <img class="logo-mark" src="assets/logo/logo.svg" alt="Smart Xray logo">
+        <b>Smart Xray</b>
+        <span class="tb-env">Patient</span>
+      </div>
+      <div class="tb-right">
+        <span class="secure-chip" title="UI placeholder — enable TLS on your backend deployment for real transport encryption">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Private &amp; Protected</span>
+        </span>
+        <button class="icon-btn" data-theme-toggle aria-label="Toggle dark mode">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+        <div class="drop" data-drop>
+          <button class="avatar-btn" aria-haspopup="true" aria-expanded="false">
+            <span class="avatar av-teal" data-user-initials>RM</span>
+            <span class="tb-user"><strong data-user-name>Rahul Mehta</strong><small data-user-id>PX-10294</small></span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="drop-menu" role="menu" style="width:230px">
+            <div class="dm-user">
+              <span class="avatar av-teal" data-user-initials>RM</span>
+              <span><strong data-user-name>Rahul Mehta</strong><small data-user-id>PX-10294</small></span>
+            </div>
+            <div class="dm-item" id="pd-profile-link"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span><b>My Profile</b></span></div>
+            <div class="dm-item" data-logout style="color:var(--danger)"><svg class="ic" style="color:var(--danger)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span><b>Logout</b></span></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="content" id="pd-content">
+      <div class="welcome-card" style="background:radial-gradient(620px 300px at 92% -20%,rgba(15,191,174,.5),transparent 60%),radial-gradient(420px 260px at 4% 120%,rgba(46,107,230,.35),transparent 60%),var(--grad-navy)">
+        <div class="wc-scan" aria-hidden="true"></div>
+        <div class="inner">
+          <div>
+            <div class="wc-eyebrow"><i></i>My Health Portal</div>
+            <h2><span id="pd-greet">Hello</span>, <span id="pd-name">Rahul</span></h2>
+            <p id="pd-welcome-sub">Here is the latest summary of your chest X-ray screening. Your doctor reviews every result before it affects your care.</p>
+          </div>
+          <div class="wc-meta">
+            <div><small>Patient ID</small><b data-user-id>PX-10294</b></div>
+            <div><small>Last Visit</small><b id="pd-last-visit">—</b></div>
+            <div><small>Doctor</small><b>Dr. Ananya Sharma</b></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Latest result -->
+      <div class="card pt-latest" id="pd-latest" style="margin-bottom:22px">
+        <div class="ptl-img">
+          <img id="pd-latest-img" src="" alt="Latest chest X-ray screening">
+        </div>
+        <div class="ptl-body">
+          <div class="card-head-row" style="margin-bottom:6px">
+            <h3 class="card-title" style="margin:0">Your Latest Screening</h3>
+            <span class="badge" id="pd-latest-badge">—</span>
+          </div>
+          <p class="card-sub" style="margin-bottom:10px" id="pd-latest-date">—</p>
+          <p class="ptl-msg" id="pd-latest-msg" style="font-size:14.5px;line-height:1.65;color:var(--muted)"></p>
+          <div class="ptl-status-row">
+            <div style="font-size:13px"><span class="muted">AI confidence</span> <b class="mono" id="pd-latest-conf">—</b></div>
+            <span class="model-tag">AI screening result — not a final diagnosis</span>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn btn-primary btn-sm" id="pd-view-details" href="report.html">View Full Details</a>
+            <button class="btn btn-soft btn-sm" id="pd-download-report">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              Download My Report
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-grid" style="grid-template-columns:1.4fr 1fr">
+        <!-- History -->
+        <div class="card card-pad">
+          <div class="card-head-row">
+            <div>
+              <h3 class="card-title">My Screening History</h3>
+              <p class="card-sub" style="margin-bottom:0">Past chest X-ray screenings and their AI results.</p>
+            </div>
+          </div>
+          <div class="pt-timeline" id="pd-timeline"></div>
+        </div>
+
+        <!-- Profile -->
+        <div class="card card-pad" id="pd-profile">
+          <div class="card-head-row">
+            <h3 class="card-title">My Profile</h3>
+          </div>
+          <div style="display:flex;gap:14px;align-items:center;margin-bottom:14px">
+            <span class="avatar av-teal" style="width:54px;height:54px;font-size:18px;border-radius:15px" data-user-initials>RM</span>
+            <div><b style="font-size:16px" data-user-name>Rahul Mehta</b><div class="small muted mono" data-user-id>PX-10294</div></div>
+          </div>
+          <div class="pt-profile">
+            <div class="pp-row"><span><small>Age</small><b>42 years</b></span><span><small>Gender</small><b>Male</b></span></div>
+            <div class="pp-row"><span><small>Contact</small><b>+91 98450 10294</b></span><span><small>Attending Doctor</small><b>Dr. A. Sharma</b></span></div>
+            <div class="pp-row"><span><small>Screenings</small><b id="pd-screen-count">—</b></span><span><small>Member Since</small><b>June 2026</b></span></div>
+          </div>
+          <div class="disclaimer">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <span>Your AI results are shared with your doctor, who interprets them clinically. Smart Xray is an AI-assisted screening tool and does not replace professional medical diagnosis.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p style="text-align:center;padding:0 20px 30px;font-size:12px;color:var(--faint)">
+  Smart Xray is an AI-assisted screening tool and does not replace professional medical diagnosis.
+</p>
+
+<script src="js/auth.js"></script>
+<script src="js/analysis.js"></script>
+<script src="js/report.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

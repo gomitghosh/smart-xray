@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New X-Ray Analysis — Smart Xray</title>
+<link rel="icon" type="image/svg+xml" href="assets/logo/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="analysis" data-protect="doctor">
+<a class="skip-link" href="#az-content">Skip to content</a>
+<div class="app">
+
+  <!-- ============ SIDEBAR (shared look) ============ -->
+  <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+    <div class="side-top">
+      <img class="logo-mark" src="assets/logo/logo.svg" alt="Smart Xray logo">
+      <span><b>Smart Xray</b><small>AI Screening</small></span>
+      <button class="icon-btn sm sb-toggle" data-sb-toggle aria-label="Collapse sidebar">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+    </div>
+    <nav class="side-nav">
+      <span class="side-label">Clinical</span>
+      <a class="side-item" href="doctor-dashboard.html#overview" title="Dashboard">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+        <span class="s-label">Dashboard</span>
+      </a>
+      <a class="side-item active" href="analysis.html" title="New Analysis">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="s-label">New Analysis</span><em class="new-tag">AI</em>
+      </a>
+      <a class="side-item" href="doctor-dashboard.html#patients" title="Patients">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="s-label">Patients</span>
+      </a>
+      <a class="side-item" href="doctor-dashboard.html#history" title="Analysis History">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <span class="s-label">Analysis History</span>
+      </a>
+      <a class="side-item" href="doctor-dashboard.html#reports" title="Reports">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>
+        <span class="s-label">Reports</span>
+      </a>
+      <a class="side-item" href="doctor-dashboard.html#settings" title="Settings">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>
+        <span class="s-label">Settings</span>
+      </a>
+    </nav>
+    <div class="side-foot">
+      <div class="side-secure" title="UI placeholder — enable TLS on your backend deployment for real transport encryption">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        <span><b>Secure Medical Data</b><small>Encrypted in transit · TLS*</small></span>
+      </div>
+      <button class="side-logout" data-logout>
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        <span class="s-label">Logout</span>
+      </button>
+    </div>
+  </aside>
+  <div class="sb-backdrop" id="sb-backdrop" data-menu-close></div>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="icon-btn" data-menu-open aria-label="Open menu">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <a class="back-link" href="doctor-dashboard.html" style="padding-left:0">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Dashboard
+      </a>
+      <div class="tb-brand" style="margin-left:6px">
+        <b style="font-family:var(--font-display)">New Analysis</b>
+        <span class="tb-env" id="az-mode-pill">Demo</span>
+      </div>
+      <div class="tb-right">
+        <span class="secure-chip" title="UI placeholder — enable TLS on your backend deployment for real transport encryption">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Secure Medical Data</span>
+        </span>
+        <button class="icon-btn" data-theme-toggle aria-label="Toggle dark mode">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+        <div class="drop" data-drop>
+          <button class="avatar-btn" aria-haspopup="true" aria-expanded="false">
+            <span class="avatar" data-user-initials>AS</span>
+            <span class="tb-user"><strong data-user-name>Dr. Sharma</strong><small data-user-id>DOC-1001</small></span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="drop-menu" role="menu" style="width:230px">
+            <div class="dm-user"><span class="avatar" data-user-initials>AS</span><span><strong data-user-name>Dr. Sharma</strong><small data-user-id>DOC-1001</small></span></div>
+            <div class="dm-item" data-logout style="color:var(--danger)"><svg class="ic" style="color:var(--danger)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span><b>Logout</b></span></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="content" id="az-content">
+      <div class="page-head">
+        <div>
+          <h1>New X-Ray Analysis</h1>
+          <p class="sub">Attach patient details, upload a chest X-ray and let the AI engine do the work.</p>
+        </div>
+        <div class="dz-formats" style="justify-content:flex-end">
+          <span>1 · Patient</span><span>2 · Upload</span><span>3 · Review</span>
+        </div>
+      </div>
+
+      <div class="analyze-grid">
+        <!-- ===== PATIENT CARD ===== -->
+        <div class="card card-pad">
+          <div class="card-head-row">
+            <div>
+              <h3 class="card-title">
+                <svg class="ic" style="color:var(--blue);width:19px;height:19px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Patient Details
+              </h3>
+              <p class="card-sub" style="margin-bottom:0">Select an existing patient or enter a new one.</p>
+            </div>
+          </div>
+          <div class="field">
+            <label for="patient-select">Existing patient</label>
+            <select class="select" id="patient-select">
+              <option value="">— New / unlisted patient —</option>
+            </select>
+            <span class="field-hint">Selecting a patient auto-fills the fields below (editable).</span>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="p-name">Patient Name <span class="req">*</span></label>
+              <input class="input" type="text" id="p-name" placeholder="Full name" autocomplete="off" required>
+            </div>
+            <div class="field">
+              <label for="p-id">Patient ID</label>
+              <input class="input mono" type="text" id="p-id" placeholder="PX-10800" autocomplete="off">
+              <span class="field-hint">Left blank? One will be generated.</span>
+            </div>
+            <div class="field">
+              <label for="p-age">Age</label>
+              <input class="input" type="number" id="p-age" min="0" max="120" placeholder="e.g. 42">
+            </div>
+            <div class="field">
+              <label for="p-gender">Gender</label>
+              <select class="select" id="p-gender">
+                <option value="">Select…</option><option>Male</option><option>Female</option><option>Other</option>
+              </select>
+            </div>
+            <div class="field span-2">
+              <label for="p-contact">Contact</label>
+              <input class="input" type="tel" id="p-contact" placeholder="+91 …" autocomplete="off">
+            </div>
+            <div class="field span-2">
+              <label for="p-notes">Clinical Notes</label>
+              <textarea class="textarea" id="p-notes" placeholder="Symptoms, history, referring notes… (optional)"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== UPLOAD CARD ===== -->
+        <div class="card card-pad">
+          <div class="card-head-row">
+            <div>
+              <h3 class="card-title">
+                <svg class="ic" style="color:var(--teal-deep);width:19px;height:19px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16l-4-4-4 4M12 12v9"/><path d="M20.4 16.6A5 5 0 0 0 18 7h-1.3A8 8 0 1 0 4 16.3"/></svg>
+                Chest X-Ray
+              </h3>
+              <p class="card-sub" style="margin-bottom:0">PA-view chest radiograph for screening.</p>
+            </div>
+          </div>
+
+          <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload chest X-ray. Drag and drop or browse files.">
+            <div class="dz-icon">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M12 7v10M8.5 10l7-3M8.5 14l7 3"/></svg>
+            </div>
+            <h3>Upload Chest X-Ray</h3>
+            <p>Drag &amp; drop your X-ray here or <span style="color:var(--blue);font-weight:600">browse files</span></p>
+            <div class="dz-formats"><span>JPG</span><span>JPEG</span><span>PNG</span><span>MAX 10 MB</span></div>
+            <input type="file" id="file-input" accept="image/jpeg,image/png" class="sr-only" aria-label="Choose chest X-ray image">
+          </div>
+
+          <div class="dz-file" id="dz-file">
+            <img class="dz-preview-img" id="dz-preview" src="" alt="Preview of uploaded chest X-ray">
+            <div style="min-width:0">
+              <b id="dz-name">file.jpg</b>
+              <small id="dz-size">0 KB</small><br>
+              <span class="ok-dot"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Ready for analysis</span>
+            </div>
+            <button class="mini-btn dz-remove" id="dz-remove" aria-label="Remove image">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              Remove
+            </button>
+          </div>
+
+          <div class="disclaimer" style="margin-top:18px">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>Images are transmitted only to your AI backend for screening. Smart Xray is an AI-assisted screening tool and does not replace professional medical diagnosis.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-bar">
+        <div class="ab-summary">
+          <b id="ab-patient">No patient selected yet</b>
+          <span id="ab-file">No X-ray uploaded</span>
+        </div>
+        <button class="btn btn-primary btn-lg" id="btn-analyze" disabled>
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z"/></svg>
+          Analyze X-Ray
+        </button>
+      </div>
+
+      <div class="api-error" id="api-error" role="alert">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+        <div>
+          <b id="api-error-title">Analysis failed</b>
+          <span id="api-error-msg">Please try again.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ANALYSIS LOADER OVERLAY ===== -->
+<div class="loader-overlay" id="loader-overlay" role="alertdialog" aria-label="Analyzing X-Ray" aria-busy="true">
+  <div class="loader-card">
+    <div class="loader-scan" aria-hidden="true">
+      <div class="ls-ring"></div>
+      <div class="ls-core">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
+      </div>
+    </div>
+    <h3>Analyzing X-Ray…</h3>
+    <p class="lc-sub">SmartXrayNet v2.1 · TensorFlow · Grad-CAM explainability</p>
+    <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="loader-bar"></div></div>
+    <ol class="stages" id="stages" style="list-style:none;margin:0;padding:0">
+      <li class="stage" data-stage="1"><span class="st-ic"><span class="st-spin"></span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16l-4-4-4 4M12 12v9"/><path d="M20.4 16.6A5 5 0 0 0 18 7h-1.3A8 8 0 1 0 4 16.3"/></svg><span class="st-check"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span><b>Uploading X-Ray</b><small>Securing image for inference</small></span></li>
+      <li class="stage" data-stage="2"><span class="st-ic"><span class="st-spin"></span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span class="st-check"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span><b>Preprocessing Image</b><small>Resize · normalize · 256×256</small></span></li>
+      <li class="stage" data-stage="3"><span class="st-ic"><span class="st-spin"></span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="3"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/></svg><span class="st-check"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span><b>Running AI Model</b><small>Pneumonia classification · softmax</small></span></li>
+      <li class="stage" data-stage="4"><span class="st-ic"><span class="st-spin"></span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg><span class="st-check"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span><b>Generating Grad-CAM</b><small>Attention map → heatmap</small></span></li>
+      <li class="stage" data-stage="5"><span class="st-ic"><span class="st-spin"></span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15l2 2 4-4"/></svg><span class="st-check"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span><b>Preparing Results</b><small>Compiling clinical summary</small></span></li>
+    </ol>
+    <button class="btn btn-outline on-dark btn-sm" id="loader-cancel">Cancel</button>
+  </div>
+</div>
+
+<script src="js/auth.js"></script>
+<script src="js/analysis.js"></script>
+</body>
+</html>
