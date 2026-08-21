@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctor Dashboard — Smart Xray</title>
+<link rel="icon" type="image/svg+xml" href="assets/logo/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="doctor-dashboard" data-protect="doctor">
+<a class="skip-link" href="#content">Skip to content</a>
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+    <div class="side-top">
+      <img class="logo-mark" src="assets/logo/logo.svg" alt="Smart Xray logo">
+      <span><b>Smart Xray</b><small>AI Screening</small></span>
+      <button class="icon-btn sm sb-toggle" data-sb-toggle aria-label="Collapse sidebar" title="Collapse sidebar">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+    </div>
+    <nav class="side-nav">
+      <span class="side-label">Clinical</span>
+      <a class="side-item active" href="doctor-dashboard.html#overview" data-nav="overview" title="Dashboard">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+        <span class="s-label">Dashboard</span>
+      </a>
+      <a class="side-item" href="analysis.html" title="New Analysis">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="s-label">New Analysis</span><em class="new-tag">AI</em>
+      </a>
+      <a class="side-item" href="#patients" data-nav="patients" title="Patients">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="s-label">Patients</span>
+      </a>
+      <a class="side-item" href="#history" data-nav="history" title="Analysis History">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <span class="s-label">Analysis History</span>
+      </a>
+      <a class="side-item" href="#reports" data-nav="reports" title="Reports">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>
+        <span class="s-label">Reports</span>
+      </a>
+      <span class="side-label">System</span>
+      <a class="side-item" href="#settings" data-nav="settings" title="Settings">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>
+        <span class="s-label">Settings</span>
+      </a>
+    </nav>
+    <div class="side-foot">
+      <div class="side-secure" title="UI placeholder — enable TLS on your backend deployment for real transport encryption">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        <span><b>Secure Medical Data</b><small>Encrypted in transit · TLS*</small></span>
+      </div>
+      <button class="side-logout" data-logout>
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        <span class="s-label">Logout</span>
+      </button>
+    </div>
+  </aside>
+  <div class="sb-backdrop" id="sb-backdrop" data-menu-close></div>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+    <header class="topbar">
+      <button class="icon-btn" data-menu-open aria-label="Open menu">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div class="tb-brand">
+        <img class="logo-mark" src="assets/logo/logo.svg" alt="" aria-hidden="true">
+        <b>Smart Xray</b>
+        <span class="tb-env">Demo</span>
+      </div>
+      <div class="search-box">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="search" id="global-search" placeholder="Search patients, analyses…" aria-label="Search patients and analyses">
+      </div>
+      <div class="tb-right">
+        <span class="secure-chip" title="UI placeholder — enable TLS on your backend deployment for real transport encryption">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Secure Medical Data</span>
+        </span>
+        <div class="drop" data-drop>
+          <button class="icon-btn" aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+            <em class="n-dot" id="notif-dot">3</em>
+          </button>
+          <div class="drop-menu" role="menu">
+            <div class="dm-head">Notifications <button class="link" id="mark-read" style="font-size:12px">Mark all read</button></div>
+            <div class="dm-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg><span><b>Pneumonia flagged — XR-2026-012</b><small>Rahul Mehta · 99.79% confidence · today</small></span></div>
+            <div class="dm-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span><b>Report generated for XR-2026-011</b><small>Priya Patel · yesterday</small></span></div>
+            <div class="dm-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="3"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg><span><b>Model SmartXrayNet v2.1 loaded</b><small>TensorFlow · Grad-CAM enabled</small></span></div>
+          </div>
+        </div>
+        <button class="icon-btn" data-theme-toggle aria-label="Toggle dark mode" title="Toggle theme">
+          <svg class="ic ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+        <div class="drop" data-drop>
+          <button class="avatar-btn" aria-haspopup="true" aria-expanded="false">
+            <span class="avatar" data-user-initials>AS</span>
+            <span class="tb-user"><strong data-user-name>Dr. Sharma</strong><small data-user-id>DOC-1001</small></span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="drop-menu" role="menu" style="width:250px">
+            <div class="dm-user">
+              <span class="avatar" data-user-initials>AS</span>
+              <span><strong data-user-name>Dr. Sharma</strong><small data-user-id>DOC-1001</small></span>
+            </div>
+            <div class="dm-item" data-nav="settings"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg><span><b>Settings</b></span></div>
+            <div class="dm-item" data-logout style="color:var(--danger)"><svg class="ic" style="color:var(--danger)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span><b>Logout</b></span></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="content" id="content">
+
+      <!-- ===== OVERVIEW ===== -->
+      <section class="page active" id="page-overview">
+        <div class="welcome-card">
+          <div class="wc-scan" aria-hidden="true"></div>
+          <div class="inner">
+            <div>
+              <div class="wc-eyebrow"><i></i><span id="greet-date">Today</span> · Radiology AI Console</div>
+              <h2><span id="greet-time">Good Morning</span>, <span id="greet-name">Dr. Sharma</span></h2>
+              <p>Ready to analyze today's chest X-rays? AI screening is live and Grad-CAM explainability is enabled.</p>
+              <a class="btn btn-primary" href="analysis.html">
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                New X-Ray Analysis
+              </a>
+            </div>
+            <div class="wc-meta">
+              <div><small>Model</small><b>SmartXrayNet v2.1</b></div>
+              <div><small>Framework</small><b>TensorFlow</b></div>
+              <div><small>Status</small><b style="color:#3FE3D0">● Online</b></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-grid">
+          <div class="card card-hover stat-card sc-blue">
+            <span class="stat-delta d-flat">stable</span>
+            <div class="stat-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <div class="stat-num"><span id="st-patients">0</span></div>
+            <div class="stat-lbl">Total Patients</div>
+          </div>
+          <div class="card card-hover stat-card sc-teal">
+            <span class="stat-delta d-up">+3 this week</span>
+            <div class="stat-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="4"/></svg></div>
+            <div class="stat-num"><span id="st-analyzed">0</span></div>
+            <div class="stat-lbl">X-Rays Analyzed</div>
+          </div>
+          <div class="card card-hover stat-card sc-red">
+            <span class="stat-delta d-up">review</span>
+            <div class="stat-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div>
+            <div class="stat-num"><span id="st-pneumonia">0</span></div>
+            <div class="stat-lbl">Pneumonia Detected</div>
+          </div>
+          <div class="card card-hover stat-card sc-purple">
+            <span class="stat-delta d-flat">model-avg</span>
+            <div class="stat-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg></div>
+            <div class="stat-num"><span id="st-confidence">0</span><span class="unit">%</span></div>
+            <div class="stat-lbl">Average Confidence</div>
+          </div>
+        </div>
+
+        <div class="card card-pad">
+          <div class="card-head-row">
+            <div>
+              <h3 class="card-title">Recent Analyses</h3>
+              <p class="card-sub" style="margin-bottom:0">Latest chest X-ray screenings processed by the AI engine.</p>
+            </div>
+            <a class="btn btn-soft btn-sm" href="#history" data-nav="history">View all
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" style="min-width:820px">
+              <thead><tr>
+                <th scope="col">Patient</th><th scope="col">Patient ID</th><th scope="col">Date</th>
+                <th scope="col">Prediction</th><th scope="col">Confidence</th><th scope="col">Status</th><th scope="col">Report</th>
+              </tr></thead>
+              <tbody id="recent-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== PATIENTS ===== -->
+      <section class="page" id="page-patients">
+        <div class="page-head">
+          <div><h1>Patients</h1><p class="sub">Every patient under AI screening, with their latest result at a glance.</p></div>
+          <a class="btn btn-primary btn-sm" href="analysis.html">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            New Analysis
+          </a>
+        </div>
+        <div class="filter-bar">
+          <div class="search-box" style="max-width:280px;flex:1">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input type="search" id="pt-search" placeholder="Search name or ID…" aria-label="Search patients">
+          </div>
+          <label class="field" style="margin:0"><span class="sr-only">Filter by result</span>
+            <select class="select" id="pt-result-filter" aria-label="Filter by latest result">
+              <option value="">All results</option><option value="PNEUMONIA">Pneumonia</option><option value="NORMAL">Normal</option>
+            </select>
+          </label>
+          <label class="field" style="margin:0"><span class="sr-only">Filter by gender</span>
+            <select class="select" id="pt-gender-filter" aria-label="Filter by gender">
+              <option value="">All genders</option><option value="Male">Male</option><option value="Female">Female</option>
+            </select>
+          </label>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" style="min-width:920px">
+            <thead><tr>
+              <th scope="col">Patient ID</th><th scope="col">Name</th><th scope="col">Age</th><th scope="col">Gender</th>
+              <th scope="col">Last Analysis</th><th scope="col">Latest Result</th><th scope="col">Actions</th>
+            </tr></thead>
+            <tbody id="patients-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===== HISTORY ===== -->
+      <section class="page" id="page-history">
+        <div class="page-head">
+          <div><h1>Analysis History</h1><p class="sub">Complete archive of AI screenings. Filter by result, date and confidence.</p></div>
+        </div>
+        <div class="filter-bar">
+          <button class="chip-btn active" data-hfilter="ALL">All</button>
+          <button class="chip-btn" data-hfilter="PNEUMONIA">Pneumonia</button>
+          <button class="chip-btn" data-hfilter="NORMAL">Normal</button>
+          <label class="field" style="margin:0"><span class="sr-only">From date</span>
+            <input class="input" type="date" id="hist-date" aria-label="Filter from date">
+          </label>
+          <div class="range-field">
+            <span>Min confidence</span>
+            <input type="range" id="hist-conf" min="0" max="100" value="0" aria-label="Minimum confidence">
+            <output id="hist-conf-out">0%</output>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" style="min-width:860px">
+            <thead><tr>
+              <th scope="col">Patient</th><th scope="col">Analysis ID</th><th scope="col">Date</th>
+              <th scope="col">Prediction</th><th scope="col">Confidence</th><th scope="col">Actions</th>
+            </tr></thead>
+            <tbody id="hist-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===== REPORTS ===== -->
+      <section class="page" id="page-reports">
+        <div class="page-head">
+          <div><h1>Reports</h1><p class="sub">Generated and pending medical screening reports — download as professional PDFs.</p></div>
+        </div>
+        <div class="report-list" id="reports-list"></div>
+      </section>
+
+      <!-- ===== SETTINGS ===== -->
+      <section class="page" id="page-settings">
+        <div class="page-head">
+          <div><h1>Settings</h1><p class="sub">Profile, preferences and AI backend integration status.</p></div>
+        </div>
+        <div class="settings-grid">
+          <div class="card card-pad">
+            <h3 class="card-title">Profile</h3>
+            <p class="card-sub">Your clinical identity, shown on generated reports.</p>
+            <div style="display:flex;gap:16px;align-items:center;margin-bottom:18px">
+              <span class="avatar" style="width:58px;height:58px;font-size:19px;border-radius:16px" data-user-initials>AS</span>
+              <div><b style="font-size:16px" data-user-name>Dr. Sharma</b><div class="small muted" data-user-id>DOC-1001</div></div>
+            </div>
+            <div class="pt-profile">
+              <div class="pp-row"><span><small>Specialty</small><b>Diagnostic Radiology</b></span><span><small>Facility</small><b>City General Hospital</b></span></div>
+              <div class="pp-row"><span><small>Email</small><b>doctor@smartxray.in</b></span><span><small>Registration</small><b>NMC-44821</b></span></div>
+            </div>
+          </div>
+
+          <div class="card card-pad">
+            <h3 class="card-title">Preferences</h3>
+            <p class="card-sub">Interface behaviour for this browser.</p>
+            <div class="setting-row">
+              <span><b>Dark mode</b><small>Switch between light and dark clinical themes.</small></span>
+              <button class="btn btn-soft btn-sm" data-theme-toggle>Toggle Theme</button>
+            </div>
+            <div class="setting-row">
+              <span><b>Collapse sidebar</b><small>Compact navigation for dense screens.</small></span>
+              <button class="btn btn-soft btn-sm" data-sb-toggle>Toggle Sidebar</button>
+            </div>
+            <div class="setting-row">
+              <span><b>Notifications</b><small>AI flags and report events.</small></span>
+              <span class="badge b-normal">Enabled</span>
+            </div>
+          </div>
+
+          <div class="card card-pad">
+            <h3 class="card-title">AI Backend Integration</h3>
+            <p class="card-sub">Status of the connection to your Python/TensorFlow model.</p>
+            <div class="setting-row">
+              <span><b>Mode</b><small>MOCK_MODE — swap to false to call the live model.</small></span>
+              <span class="mode-pill" id="mock-pill"><i></i><span id="mock-pill-text">MOCK MODE</span></span>
+            </div>
+            <div class="setting-row">
+              <span><b>Model status</b><small>Live check of <span class="mono">GET /api/health</span> on your backend.</small></span>
+              <span class="health-chip h-checking" data-health><i></i><span data-health-text>CHECKING…</span></span>
+            </div>
+            <div class="setting-row" style="display:block">
+              <span style="display:block;margin-bottom:9px"><b>Endpoint</b>
+                <code class="api-code" id="api-url">http://localhost:5000/api/analyze</code>
+              </span>
+              <small class="muted">Defined in <span class="mono">js/analysis.js</span> — change only <span class="mono">API_URL</span> (and the field mapping in <span class="mono">mapApiResult()</span>) to connect your backend.</small>
+            </div>
+          </div>
+
+          <div class="card card-pad">
+            <h3 class="card-title">Privacy &amp; Security</h3>
+            <p class="card-sub">How this deployment communicates protection.</p>
+            <div class="setting-row"><span><b>Secure Medical Data</b><small>Role-based views for doctors and patients.</small></span><span class="badge b-neutral">UI Placeholder</span></div>
+            <div class="setting-row"><span><b>Encrypted Communication</b><small>Enable TLS on your Flask/FastAPI deployment.</small></span><span class="badge b-neutral">UI Placeholder</span></div>
+            <div class="setting-row"><span><b>Privacy Protected</b><small>Minimal clinical fields, visible disclaimers.</small></span><span class="badge b-neutral">UI Placeholder</span></div>
+            <p class="small muted" style="margin:14px 0 0">Security badges across the UI are indicators only and do not assert encryption until your backend enforces it.</p>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<p style="text-align:center;padding:0 20px 30px;font-size:12px;color:var(--faint)">
+  Smart Xray is an AI-assisted screening tool and does not replace professional medical diagnosis.
+</p>
+
+<script src="js/auth.js"></script>
+<script src="js/analysis.js"></script>
+<script src="js/report.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

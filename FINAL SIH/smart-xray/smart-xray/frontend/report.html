@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Analysis Result — Smart Xray</title>
+<link rel="icon" type="image/svg+xml" href="assets/logo/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<!-- jsPDF (CDN) — browser PDF generation for the medical report -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body data-page="report">
+<a class="skip-link" href="#rp-content">Skip to results</a>
+<div class="app">
+  <div class="main" style="margin-left:0">
+    <header class="topbar">
+      <a class="back-link" id="rp-back" href="doctor-dashboard.html" style="padding-left:0">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span id="rp-back-label">Back to Dashboard</span>
+      </a>
+      <div class="tb-brand" style="margin-left:10px">
+        <img class="logo-mark" src="assets/logo/logo.svg" alt="Smart Xray logo">
+        <b>Smart Xray</b>
+      </div>
+      <div class="tb-right">
+        <span class="secure-chip" title="UI placeholder — enable TLS on your backend deployment for real transport encryption">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Secure Medical Data</span>
+        </span>
+        <button class="icon-btn" data-theme-toggle aria-label="Toggle dark mode">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+        <div class="drop" data-drop>
+          <button class="avatar-btn" aria-haspopup="true" aria-expanded="false">
+            <span class="avatar" data-user-initials>AS</span>
+            <span class="tb-user"><strong data-user-name>Dr. Sharma</strong><small data-user-id>DOC-1001</small></span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="drop-menu" role="menu" style="width:230px">
+            <div class="dm-user"><span class="avatar" data-user-initials>AS</span><span><strong data-user-name>Dr. Sharma</strong><small data-user-id>DOC-1001</small></span></div>
+            <div class="dm-item" data-logout style="color:var(--danger)"><svg class="ic" style="color:var(--danger)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span><b>Logout</b></span></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="content" id="rp-content" style="max-width:1280px;margin:0 auto">
+      <div id="rp-empty" class="card card-pad hidden" style="text-align:center;padding:70px 30px">
+        <h2>No analysis found</h2>
+        <p class="muted">Run a new X-ray analysis or pick one from the history.</p>
+        <a class="btn btn-primary" href="analysis.html">Start New Analysis</a>
+      </div>
+
+      <div id="rp-body" class="hidden">
+        <!-- ===== RESULT HERO ===== -->
+        <div class="result-hero" id="result-hero">
+          <div class="rh-main">
+            <span class="rh-eyebrow"><i></i> AI Screening Result</span>
+            <h2 id="result-title">Analyzing…</h2>
+            <p class="rh-sub" id="result-sub">Clinical review recommended.</p>
+            <div class="rh-actions">
+              <button class="btn btn-primary" id="btn-pdf">
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                Download Medical Report
+              </button>
+              <a class="btn btn-outline on-dark" href="analysis.html">
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                New Analysis
+              </a>
+            </div>
+          </div>
+          <div class="ring-wrap" aria-hidden="true">
+            <svg class="ring" viewBox="0 0 140 140">
+              <circle class="ring-bg" cx="70" cy="70" r="58"></circle>
+              <circle class="ring-val" id="ring-circle" cx="70" cy="70" r="58"></circle>
+            </svg>
+            <div class="ring-center"><b id="ring-value">0%</b><small>Confidence</small></div>
+          </div>
+          <div class="rh-meta">
+            <span>ANALYSIS <b id="m-aid">—</b></span>
+            <span>DATE <b id="m-date">—</b></span>
+            <span>PREDICTION <b id="m-pred">—</b></span>
+          </div>
+        </div>
+
+        <!-- ===== MAIN GRID ===== -->
+        <div class="report-grid">
+          <div>
+            <!-- Comparison section -->
+            <div class="card card-pad">
+              <div class="card-head-row">
+                <div>
+                  <h3 class="card-title">Original X-Ray vs Grad-CAM Heatmap</h3>
+                  <p class="card-sub" style="margin-bottom:0">Inspect the raw image against the model's attention map.</p>
+                </div>
+              </div>
+              <div class="cmp-toolbar">
+                <div class="mode-group" role="group" aria-label="View mode">
+                  <button class="mode-btn active" data-mode="side">
+                    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 3v18"/></svg>
+                    Side by Side
+                  </button>
+                  <button class="mode-btn" data-mode="slider">
+                    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8 4 12l4 4M16 8l4 4-4 4M4 12h16"/></svg>
+                    Compare Slider
+                  </button>
+                </div>
+                <div class="spacer"></div>
+                <button class="icon-btn" id="zoom-out" aria-label="Zoom out" title="Zoom out">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11h6"/></svg>
+                </button>
+                <span class="zoom-pill" id="zoom-pct" aria-live="polite">100%</span>
+                <button class="icon-btn" id="zoom-in" aria-label="Zoom in" title="Zoom in">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg>
+                </button>
+                <button class="icon-btn" id="zoom-reset" aria-label="Reset zoom" title="Reset zoom">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+                <button class="icon-btn" id="btn-fs" aria-label="Fullscreen view" title="Fullscreen">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M16 21h3a2 2 0 0 0 2-2v-3M8 21H5a2 2 0 0 1-2-2v-3"/></svg>
+                </button>
+              </div>
+
+              <div class="cmp-stage" id="cmp-stage">
+                <figure class="cmp-panel">
+                  <figcaption><span class="fig-dot d-orig"></span> Original X-Ray</figcaption>
+                  <div class="img-viewport"><div class="zoom-layer"><img id="img-original" src="" alt="Original uploaded chest X-ray"></div></div>
+                </figure>
+                <figure class="cmp-panel">
+                  <figcaption><span class="fig-dot d-heat"></span> Grad-CAM Heatmap</figcaption>
+                  <div class="img-viewport"><div class="zoom-layer"><img id="img-heatmap" src="" alt="Grad-CAM heatmap generated by the AI model"></div></div>
+                </figure>
+              </div>
+
+              <div class="cmp cmp-slider hidden" id="cmp-slider">
+                <div class="cmp-imgs">
+                  <img id="sl-orig" src="" alt="Original chest X-ray">
+                  <div class="sl-heat" id="sl-heat"><img id="sl-heatimg" src="" alt="Grad-CAM heatmap overlay"></div>
+                  <div class="sl-handle" id="sl-handle"><span class="sl-grip"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8 4 12l4 4M16 8l4 4-4 4M4 12h16"/></svg></span></div>
+                  <input type="range" class="cmp-range" id="sl-range" min="0" max="100" value="50" aria-label="Slide to compare original X-ray and Grad-CAM heatmap">
+                  <span class="cmp-tag t-left">Original</span>
+                  <span class="cmp-tag t-right">Grad-CAM</span>
+                </div>
+              </div>
+
+              <div class="cmp-explain">
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
+                <span><b>Grad-CAM</b> highlights regions that contributed most strongly to the AI model's prediction. <b>Use the legend below the heatmap</b> — warmer colours mean higher model attention.</span>
+              </div>
+              <div class="legend" style="max-width:none">
+                <span>Low activation</span><span class="legend-bar" aria-hidden="true"></span><span>High activation</span>
+              </div>
+            </div>
+
+            <!-- Confidence + model performance -->
+            <div class="conf-grid">
+              <div class="card card-pad">
+                <h3 class="card-title">
+                  <svg class="ic" style="color:var(--blue);width:18px;height:18px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>
+                  AI Confidence
+                </h3>
+                <p class="card-sub">Per-image model confidence for this screening — not a measurement of patient condition.</p>
+                <div class="conf-visual" style="flex-direction:column;align-items:flex-start">
+                  <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+                    <b style="font-family:var(--font-display);font-size:44px;letter-spacing:-.02em" id="conf-big">0%</b>
+                    <span class="badge" id="conf-pred">—</span>
+                  </div>
+                  <div class="prob-row" style="width:100%">
+                    <div class="pr-head"><span>Pneumonia probability</span><span id="prob-pneu">—</span></div>
+                    <div class="prob-track pr-pneu"><i id="bar-pneu"></i></div>
+                  </div>
+                  <div class="prob-row" style="width:100%">
+                    <div class="pr-head"><span>Normal probability</span><span id="prob-normal">—</span></div>
+                    <div class="prob-track pr-normal"><i id="bar-normal"></i></div>
+                  </div>
+                </div>
+              </div>
+              <div class="card card-pad">
+                <h3 class="card-title">
+                  <svg class="ic" style="color:var(--purple);width:18px;height:18px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="3"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+                  Model Performance
+                </h3>
+                <p class="card-sub">Model-level evaluation on the validation set — not patient-specific metrics.</p>
+                <div class="metric"><div class="pr-head"><span>Accuracy</span><b>94.2%</b></div><div class="prob-track"><i data-w="94.2"></i></div></div>
+                <div class="metric"><div class="pr-head"><span>Sensitivity</span><b>92.8%</b></div><div class="prob-track"><i data-w="92.8"></i></div></div>
+                <div class="metric"><div class="pr-head"><span>Specificity</span><b>95.1%</b></div><div class="prob-track"><i data-w="95.1"></i></div></div>
+                <span class="model-tag">SmartXrayNet v2.1 · TensorFlow</span>
+                <p class="model-note">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
+                  These are benchmark figures reported for the model itself. Replace with your model's actual evaluation metrics before clinical use.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== SIDE COLUMN ===== -->
+          <div>
+            <div class="card card-pad">
+              <h3 class="card-title">
+                <svg class="ic" style="color:var(--teal-deep);width:18px;height:18px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+                Clinical Summary
+              </h3>
+              <p class="card-sub">Screening record for this analysis.</p>
+              <div class="summary-grid">
+                <div class="sum-item"><small>Patient</small><b id="s-name">—</b></div>
+                <div class="sum-item"><small>Patient ID</small><b class="mono" id="s-id">—</b></div>
+                <div class="sum-item"><small>Age</small><b id="s-age">—</b></div>
+                <div class="sum-item"><small>Gender</small><b id="s-gender">—</b></div>
+                <div class="sum-item"><small>Analysis ID</small><b class="mono" id="s-aid">—</b></div>
+                <div class="sum-item"><small>Prediction</small><b id="s-pred">—</b></div>
+                <div class="sum-item"><small>Confidence</small><b class="mono" id="s-conf">—</b></div>
+                <div class="sum-item"><small>Date</small><b id="s-date">—</b></div>
+              </div>
+              <div class="interpret" id="interpret-box">
+                <b>AI Interpretation</b>
+                <p id="interpret-text" style="margin:6px 0 0"></p>
+              </div>
+              <div class="disclaimer">
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+                <span>AI-generated screening result. Final interpretation should be performed by a qualified healthcare professional.</span>
+              </div>
+            </div>
+
+            <div class="card card-pad" style="margin-top:22px">
+              <h3 class="card-title">
+                <svg class="ic" style="color:var(--teal-deep);width:18px;height:18px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                Data Protection
+              </h3>
+              <p class="card-sub">How this record is handled in the demo environment.</p>
+              <div class="setting-row"><span><b>Secure Medical Data</b><small>Role-scoped visibility</small></span><span class="badge b-neutral">UI Placeholder</span></div>
+              <div class="setting-row"><span><b>Encrypted Communication</b><small>Enable TLS at your deployment</small></span><span class="badge b-neutral">UI Placeholder</span></div>
+              <div class="setting-row"><span><b>Privacy Protected</b><small>Minimal clinical fields</small></span><span class="badge b-neutral">UI Placeholder</span></div>
+            </div>
+          </div>
+        </div>
+
+        <p style="text-align:center;margin-top:34px;font-size:12.5px;color:var(--faint)">
+          Report <span class="mono" id="rp-foot-id">—</span> · Generated by Smart Xray ·
+          <em>Smart Xray is an AI-assisted screening tool and does not replace professional medical diagnosis.</em>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/auth.js"></script>
+<script src="js/analysis.js"></script>
+<script src="js/report.js"></script>
+</body>
+</html>

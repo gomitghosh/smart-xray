@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Xray — AI-Powered Chest X-Ray Screening</title>
+<meta name="description" content="Smart Xray is an AI-assisted chest X-ray screening platform with Grad-CAM explainability, built to support clinical review by healthcare professionals.">
+<link rel="icon" type="image/svg+xml" href="assets/logo/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="landing" class="on-dark">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="topnav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html" aria-label="Smart Xray home">
+      <img class="logo-mark" src="assets/logo/logo.svg" alt="Smart Xray logo">
+      <span><b>Smart Xray</b><small>AI Screening</small></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#how">How It Works</a>
+      <a href="#features">Features</a>
+      <a href="#explain">Explainability</a>
+      <a href="#security">Security</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-ghost on-dark" style="color:#B9C7E4" href="login.html">Sign In</a>
+      <a class="btn btn-primary btn-sm" href="login.html">Get Started</a>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Menu">
+  <button class="mm-close" id="mmClose" aria-label="Close menu">
+    <svg class="ic" style="width:26px;height:26px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  </button>
+  <a href="#how" data-mm>How It Works</a>
+  <a href="#features" data-mm>Features</a>
+  <a href="#explain" data-mm>Explainability</a>
+  <a href="#security" data-mm>Security</a>
+  <a href="login.html">Sign In</a>
+</div>
+
+<main id="main">
+<!-- ============ HERO ============ -->
+<section class="hero noise">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <span class="hero-eyebrow"><span class="k-dot"></span> Explainable AI · Grad-CAM · Clinical-First</span>
+      <h1>See Beyond the <span class="grad" id="decode">X-Ray.</span></h1>
+      <p class="sub">AI-powered chest X-ray screening designed to assist healthcare professionals with faster, smarter and more explainable analysis.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary btn-lg" href="login.html">
+          Get Started
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a class="btn btn-outline on-dark btn-lg" href="#how">Explore Smart Xray</a>
+      </div>
+      <div class="hero-trust">
+        <span class="trust-item">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Secure by design
+        </span>
+        <span class="trust-item">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          Results in seconds
+        </span>
+        <span class="trust-item">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          Explainable output
+        </span>
+      </div>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <div class="xray-frame">
+        <div class="xray-screen">
+          <img id="hero-xray" src="" alt="Sample chest X-ray under AI analysis with Grad-CAM heatmap overlay">
+          <div class="scanline"></div>
+          <div class="xray-hud">
+            <span class="t1">XR-2026-001 · CXR_PA</span>
+            <span class="t2">GRAD-CAM v2.1</span>
+            <span class="t3">LUNG SEGMENTATION: OK</span>
+            <span class="t4">PNEUMONIA · 99.79%</span>
+          </div>
+          <span class="hud-corner c1"></span><span class="hud-corner c2"></span>
+          <span class="hud-corner c3"></span><span class="hud-corner c4"></span>
+        </div>
+        <div class="xray-status">
+          <span class="live-dot"><i></i> MODEL INFERENCE · LIVE</span>
+          <span>256×256 · TF v2.1</span>
+        </div>
+      </div>
+
+      <!-- Floating glass chips -->
+      <div class="chip chip-1">
+        <span class="chip-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="3"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/></svg></span>
+        <span><small>AI Analysis</small><b>Running…</b></span>
+      </div>
+      <div class="chip chip-2">
+        <span class="chip-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span>
+        <span><small>Pneumonia Detection</small><b>99.79%</b></span>
+      </div>
+      <div class="chip chip-3">
+        <span class="chip-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="4"/></svg></span>
+        <span><small>Grad-CAM</small><b>Explainability</b></span>
+      </div>
+      <div class="chip chip-4">
+        <span class="chip-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg></span>
+        <span><small>Confidence Score</small><b>99.79%</b></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAT STRIP ============ -->
+<section class="stat-strip" aria-label="Model validation metrics">
+  <div class="inner">
+    <div class="strip-stat"><div class="num"><span data-count="94.2" data-dec="1">0</span><span class="unit">%</span></div><div class="lbl">Validation Accuracy</div></div>
+    <div class="strip-stat"><div class="num"><span data-count="92.8" data-dec="1">0</span><span class="unit">%</span></div><div class="lbl">Sensitivity</div></div>
+    <div class="strip-stat"><div class="num"><span data-count="95.1" data-dec="1">0</span><span class="unit">%</span></div><div class="lbl">Specificity</div></div>
+    <div class="strip-stat"><div class="num"><span data-count="2.4" data-dec="1">0</span><span class="unit">s</span></div><div class="lbl">Avg. Inference</div></div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="section" id="how">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker"><span class="k-dot"></span> Workflow</span>
+      <h2>From image to insight in four steps</h2>
+      <p class="lede">A workflow built around the radiologist — the AI proposes, the heatmap explains, the clinician decides.</p>
+    </div>
+    <div class="steps">
+      <div class="step card card-hover reveal" data-delay="1">
+        <span class="step-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16l-4-4-4 4M12 12v9"/><path d="M20.4 16.6A5 5 0 0 0 18 7h-1.3A8 8 0 1 0 4 16.3"/></svg></span>
+        <div class="step-num"></div>
+        <h3>Upload X-Ray</h3>
+        <p>Drag &amp; drop a chest X-ray (JPG, PNG) and attach the patient's clinical details in one screen.</p>
+      </div>
+      <div class="step card card-hover reveal" data-delay="2">
+        <span class="step-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="3"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/></svg></span>
+        <div class="step-num"></div>
+        <h3>AI Analysis</h3>
+        <p>Your TensorFlow model classifies the image for pneumonia and returns a calibrated confidence score.</p>
+      </div>
+      <div class="step card card-hover reveal" data-delay="3">
+        <span class="step-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span>
+        <div class="step-num"></div>
+        <h3>Explainable Heatmap</h3>
+        <p>Grad-CAM highlights exactly which regions of the chest drove the model's decision.</p>
+      </div>
+      <div class="step card card-hover reveal" data-delay="4">
+        <span class="step-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6 6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6 6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></svg></span>
+        <div class="step-num"></div>
+        <h3>Clinical Review</h3>
+        <p>The physician reviews the side-by-side evidence and downloads a professional PDF report.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURES ============ -->
+<section class="section" id="features" style="background:var(--surface);border-block:1px solid var(--border)">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker"><span class="k-dot"></span> Capabilities</span>
+      <h2>Everything a screening workflow needs</h2>
+      <p class="lede">Purpose-built for doctors, patients and the AI engine that sits between them.</p>
+    </div>
+    <div class="features">
+      <div class="feature-card card card-hover a-blue feature-wide reveal">
+        <div>
+          <div class="f-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.5 3-3.2 3-5.2A4.8 4.8 0 0 0 17.2 4c-1.7 0-3 .5-5.2 2.7C9.9 4.5 8.5 4 6.8 4A4.8 4.8 0 0 0 2 8.8c0 2 1.5 3.7 3 5.2l7 7z"/><path d="M3.2 12h5.3l1.5-3 3 6 1.5-3h5.3"/></svg></div>
+          <h3>AI Pneumonia Screening</h3>
+          <p>Binary pneumonia classification powered by your existing TensorFlow model. Instant predictions with a transparent confidence score — surfaced as a screening aid, never as a final diagnosis.</p>
+        </div>
+        <div class="fw-img"><img id="feat-xray" src="" alt="Chest X-ray with pneumonia region highlighted by Grad-CAM"><span class="fw-tag">GRAD-CAM ACTIVE</span></div>
+      </div>
+      <div class="feature-card card card-hover a-amber reveal" data-delay="1">
+        <div class="f-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div>
+        <h3>Grad-CAM Explainability</h3>
+        <p>See the exact regions of the lung field that influenced the prediction.</p>
+      </div>
+      <div class="feature-card card card-hover a-teal reveal" data-delay="2">
+        <div class="f-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg></div>
+        <h3>Confidence Score</h3>
+        <p>Calibrated per-image confidence, clearly separated from model-level metrics.</p>
+      </div>
+      <div class="feature-card card card-hover a-purple reveal">
+        <div class="f-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 3v18"/></svg></div>
+        <h3>Original vs Heatmap</h3>
+        <p>Side-by-side viewer with zoom, fullscreen and an interactive compare slider.</p>
+      </div>
+      <div class="feature-card card card-hover a-blue reveal" data-delay="1">
+        <div class="f-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>Patient Management</h3>
+        <p>Profiles, history and latest results for every patient under your care.</p>
+      </div>
+      <div class="feature-card card card-hover a-teal reveal" data-delay="2">
+        <div class="f-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg></div>
+        <h3>Doctor Dashboard</h3>
+        <p>Live statistics, recent analyses and one-click access to full reports.</p>
+      </div>
+      <div class="feature-card card card-hover a-blue reveal">
+        <div class="f-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M8 9h2"/></svg></div>
+        <h3>Downloadable Reports</h3>
+        <p>One-click professional PDF reports with images, scores and disclaimers.</p>
+      </div>
+      <div class="feature-card card card-hover a-purple reveal" data-delay="1">
+        <div class="f-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+        <h3>Analysis History</h3>
+        <p>Searchable, filterable archive of every screening your team has run.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXPLAINABILITY ============ -->
+<section class="section" id="explain">
+  <div class="container">
+    <div class="explain-wrap">
+      <div class="reveal">
+        <span class="kicker"><span class="k-dot"></span> Explainability</span>
+        <h2>The AI shows its work</h2>
+        <p class="lede" style="margin-bottom:22px">Every prediction ships with a Grad-CAM heatmap — a visual map of where the model was looking. Drag the slider to compare the raw image with the model's attention.</p>
+        <div class="sec-badges" style="max-width:420px">
+          <div class="sec-badge" style="background:var(--surface-2);border-color:var(--border)">
+            <span class="s-ic" style="background:rgba(229,72,77,.1);color:var(--danger)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z"/></svg></span>
+            <span><b>Regional attention, not a black box</b><small>Interventional gradients mapped to the last convolutional layer.</small></span>
+          </div>
+          <div class="sec-badge" style="background:var(--surface-2);border-color:var(--border)">
+            <span class="s-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            <span><b>Trusted by the reviewer</b><small>Designed so clinicians can verify — or refute — the AI in seconds.</small></span>
+          </div>
+        </div>
+      </div>
+      <div class="cmp reveal" id="exp-cmp" data-delay="1" role="group" aria-label="Interactive comparison of original X-ray and Grad-CAM heatmap">
+        <div class="cmp-imgs">
+          <img id="exp-orig" src="" alt="Original chest X-ray">
+          <div class="sl-heat" id="exp-heat"><img id="exp-heatimg" src="" alt="Grad-CAM heatmap overlay"></div>
+          <div class="sl-handle" id="exp-handle"><span class="sl-grip"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8 4 12l4 4M16 8l4 4-4 4M4 12h16"/></svg></span></div>
+          <input type="range" class="cmp-range" id="exp-range" min="0" max="100" value="50" aria-label="Slide to compare original X-ray and Grad-CAM heatmap">
+          <span class="cmp-tag t-left">Original</span>
+          <span class="cmp-tag t-right">Grad-CAM</span>
+        </div>
+      </div>
+    </div>
+    <p class="legend" style="max-width:760px">
+      <span>Low activation</span>
+      <span class="legend-bar" aria-hidden="true"></span>
+      <span>High activation</span>
+    </p>
+  </div>
+</section>
+
+<!-- ============ SECURITY ============ -->
+<section class="section sec-strip on-dark" id="security">
+  <div class="sec-inner">
+    <div class="reveal">
+      <span class="kicker" style="color:#7FE8DB;background:rgba(15,191,174,.1);border-color:rgba(15,191,174,.35)"><span class="k-dot"></span> Privacy &amp; Security</span>
+      <h2>Healthcare-grade discipline</h2>
+      <p class="lede">Patient imaging is sensitive by nature. Smart Xray is designed with privacy surfaces throughout — role-based access, doctor-only administration and patient-friendly portals.</p>
+    </div>
+    <div class="sec-badges reveal" data-delay="1">
+      <div class="sec-badge">
+        <span class="s-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <span><b>Secure Medical Data</b><small>Role-based access — doctors and patients see only what they should.*</small></span>
+      </div>
+      <div class="sec-badge">
+        <span class="s-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+        <span><b>Encrypted Communication</b><small>API layer ready for TLS in your deployment.*</small></span>
+      </div>
+      <div class="sec-badge">
+        <span class="s-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span>
+        <span><b>Privacy Protected</b><small>Minimal fields, clinical purpose only, visible disclaimers.*</small></span>
+      </div>
+      <p class="footer-note" style="color:#516385">*Security indicators are UI placeholders until enabled on your backend deployment.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta-band on-dark">
+  <div class="container reveal">
+    <h2>Bring explainable AI to your radiology workflow.</h2>
+    <p>Connect your existing Python/TensorFlow model with a single API endpoint — no frontend changes required.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary btn-lg" href="login.html">Create Doctor Account</a>
+      <a class="btn btn-outline on-dark btn-lg" href="#how">Explore Smart Xray</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="index.html" style="margin-bottom:16px">
+          <img class="logo-mark" src="assets/logo/logo.svg" alt="Smart Xray logo">
+          <span><b>Smart Xray</b><small>AI Screening</small></span>
+        </a>
+        <p style="font-size:13.5px;max-width:300px;margin-top:14px">AI-Powered Chest X-Ray Screening. A clinical decision-support surface for your existing TensorFlow pneumonia model.</p>
+        <div class="disclaimer-box">
+          <b>Disclaimer:</b> Smart Xray is an AI-assisted screening tool and does not replace professional medical diagnosis. Final interpretation should always be performed by a qualified healthcare professional.
+        </div>
+      </div>
+      <div>
+        <h4>Product</h4>
+        <a href="#how">How It Works</a>
+        <a href="#features">Features</a>
+        <a href="#explain">Explainability</a>
+        <a href="#security">Security</a>
+      </div>
+      <div>
+        <h4>Clinical</h4>
+        <a href="login.html">Doctor Dashboard</a>
+        <a href="login.html">Patient Portal</a>
+        <a href="analysis.html">New X-Ray Analysis</a>
+        <a href="report.html">Sample Report</a>
+      </div>
+      <div>
+        <h4>Model</h4>
+        <a href="#security">TensorFlow Integration</a>
+        <a href="#explain">Grad-CAM Output</a>
+        <a href="#explain">Confidence Scoring</a>
+        <a href="#security">Validation Metrics</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Smart Xray · AI-Powered Chest X-Ray Screening</span>
+      <span>Built for Smart India Hackathon 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/auth.js"></script>
+<script src="js/analysis.js"></script>
+<script>
+/* Landing page: hero image generation, decode animation, counters, compare slider */
+(function(){
+  var SXW = window.SX || {};
+
+  // Generate sample X-ray imagery (no external assets required in demo mode)
+  var gen = (window.SXAPI && SXAPI.mockImages) || null;
+  function paintSamples(){
+    if(!gen) return;
+    var hero = document.getElementById('hero-xray');
+    if(hero) hero.src = gen.xrayDataURL({pneumonia:true, seed:7, overlay:true});
+    var feat = document.getElementById('feat-xray');
+    if(feat) feat.src = gen.heatmapDataURL({pneumonia:true, seed:7});
+    var o = document.getElementById('exp-orig'), h = document.getElementById('exp-heatimg');
+    if(o) o.src = gen.xrayDataURL({pneumonia:true, seed:7});
+    if(h) h.src = gen.heatmapDataURL({pneumonia:true, seed:7});
+  }
+  paintSamples();
+
+  // Scramble-decode on the hero word
+  var dec = document.getElementById('decode');
+  if(dec && !SXW.reducedMotion){
+    var target = dec.textContent, glyphs = '▓▒░<>/\\|+=*#';
+    var frame = 0, total = 26;
+    (function tick(){
+      frame++;
+      var out = '';
+      for(var i=0;i<target.length;i++){
+        out += (i < (frame/total)*target.length) ? target[i] : glyphs[Math.floor(Math.random()*glyphs.length)];
+      }
+      dec.textContent = out;
+      if(frame < total) requestAnimationFrame(tick); else dec.textContent = target;
+    })();
+  }
+
+  // Animated counters (model-level validation metrics)
+  var counted = false;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting && !counted){
+        counted = true;
+        document.querySelectorAll('[data-count]').forEach(function(el){
+          var end = parseFloat(el.dataset.count), d = parseInt(el.dataset.dec||'0',10);
+          (SXW.countUp || function(el){el.textContent = end.toFixed(d);})(el, end, {dur:1600, dec:d});
+        });
+      }
+    });
+  }, {threshold:.4});
+  var strip = document.querySelector('.stat-strip');
+  if(strip) io.observe(strip);
+
+  // Compare slider (explainability showcase)
+  var range = document.getElementById('exp-range');
+  if(range){
+    var heat = document.getElementById('exp-heat'), handle = document.getElementById('exp-handle');
+    var apply = function(){
+      var v = +range.value;
+      heat.style.clipPath = 'inset(0 ' + (100 - v) + '% 0 0)';
+      handle.style.left = v + '%';
+    };
+    range.addEventListener('input', apply);
+    apply();
+  }
+
+  // Nav scroll state + mobile menu
+  var nav = document.getElementById('topnav');
+  window.addEventListener('scroll', function(){
+    nav.classList.toggle('scrolled', window.scrollY > 24);
+  }, {passive:true});
+  var mm = document.getElementById('mobileMenu');
+  var burger = document.getElementById('burger');
+  burger.addEventListener('click', function(){ mm.classList.add('open'); burger.setAttribute('aria-expanded','true'); });
+  document.getElementById('mmClose').addEventListener('click', function(){ mm.classList.remove('open'); });
+  mm.querySelectorAll('[data-mm]').forEach(function(a){ a.addEventListener('click', function(){ mm.classList.remove('open'); }); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "analysis_id": "XR-2026-0002",
+  "timestamp": "2026-08-21T21:43:15",
+  "prediction": "PNEUMONIA",
+  "confidence": 53.73,
+  "patient": {
+    "patient_name": "Smit",
+    "patient_id": "12343",
+    "age": "20",
+    "gender": "Male",
+    "clinical_notes": ""
+  }
+}

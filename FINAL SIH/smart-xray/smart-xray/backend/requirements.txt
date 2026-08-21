@@ -1,0 +1,10 @@
+# Smart Xray backend — Python dependencies
+# Install with:  pip install -r backend/requirements.txt
+Flask>=2.3
+flask-cors>=4.0
+tensorflow>=2.13
+numpy
+Pillow>=9.0
+matplotlib>=3.6
+# Required only if you re-run train_model.py (not used at inference time):
+scikit-learn
