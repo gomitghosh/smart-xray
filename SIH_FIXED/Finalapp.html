@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Xray Scan - SIH Medical AI Portal</title>
+  <style>
+    /* CSS RESET & VARIABLES */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    :root {
+      --primary: #0a0f1d;
+      --secondary: #111827;
+      --accent-blue: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-glow: rgba(6, 182, 212, 0.4);
+      --bg-light: #f8fafc;
+      --text-dark: #0f172a;
+      --text-muted: #64748b;
+      --card-bg: #ffffff;
+      --success: #10b981;
+      --danger: #ef4444;
+      --border: #e2e8f0;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ----------------------------------------------------
+       1. SIH ATTRACTIVE AUTHENTICATION PAGE WITH MEDTECH BG
+    ---------------------------------------------------- */
+    #loginPage {
+      display: flex;
+      min-height: 100vh;
+      background: radial-gradient(circle at 10% 20%, #0f172a 0%, #020617 100%);
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* MedTech Background Wave & Grid FX */
+    .medtech-grid {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-image: 
+        linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .ecg-line {
+      position: absolute;
+      width: 200%;
+      height: 120px;
+      top: 50%;
+      left: -50%;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 300px,
+        rgba(6, 182, 212, 0.15) 350px,
+        rgba(6, 182, 212, 0.15) 360px,
+        transparent 400px
+      );
+      transform: translateY(-50%) rotate(-5deg);
+      animation: pulseMove 12s linear infinite;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    @keyframes pulseMove {
+      0% { transform: translateY(-50%) translateX(0) rotate(-5deg); }
+      100% { transform: translateY(-50%) translateX(-500px) rotate(-5deg); }
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .orb-1 { width: 450px; height: 450px; background: rgba(59, 130, 246, 0.2); top: -100px; left: -100px; }
+    .orb-2 { width: 400px; height: 400px; background: rgba(6, 182, 212, 0.18); bottom: -80px; right: -80px; }
+
+    .login-wrapper {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      max-width: 950px;
+      width: 100%;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    /* Left Branding Banner */
+    .login-branding {
+      padding: 4rem 3rem;
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.35) 0%, rgba(6, 182, 212, 0.08) 100%);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: white;
+    }
+
+    .sih-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(6, 182, 212, 0.15);
+      color: var(--accent-cyan);
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      width: fit-content;
+      margin-bottom: 2rem;
+    }
+
+    .sih-badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--accent-cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent-cyan);
+    }
+
+    .brand-title h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+
+    .brand-title h1 span {
+      background: linear-gradient(to right, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-title p {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Right Auth Form */
+    .login-card {
+      padding: 4rem 3rem;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .auth-tabs {
+      display: flex;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 0.7rem;
+      background: none;
+      border: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #94a3b8;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+
+    .auth-tab.active {
+      background: var(--accent-blue);
+      color: white;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .auth-form {
+      display: none;
+    }
+
+    .auth-form.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 1.3rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      outline: none;
+      font-size: 0.95rem;
+      color: white;
+      transition: all 0.3s;
+    }
+
+    .form-group input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.2);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 0.95rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-cyan) 100%);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 10px 20px -5px rgba(6, 182, 212, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px -5px rgba(6, 182, 212, 0.6);
+    }
+
+    /* ----------------------------------------------------
+       2. MAIN DASHBOARD FRAMEWORK (HIDDEN INITIALLY)
+    ---------------------------------------------------- */
+    #dashboardPage {
+      display: none;
+    }
+
+    header {
+      background-color: var(--primary);
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .logo span {
+      color: var(--accent-cyan);
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 1.8rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+      cursor: pointer;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--accent-cyan);
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      color: #cbd5e1;
+      font-size: 0.85rem;
+    }
+
+    .user-badge {
+      background: rgba(6, 182, 212, 0.2);
+      color: var(--accent-cyan);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    /* PAGE VIEWS MANAGEMENT */
+    .page-view {
+      display: none;
+    }
+
+    .page-view.active {
+      display: block;
+    }
+
+    /* COMMON PAGE LAYOUTS */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem;
+    }
+
+    .section-title {
+      margin-bottom: 2rem;
+    }
+
+    .section-title h2 {
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
+
+    .section-title p {
+      color: var(--text-muted);
+    }
+
+    /* BUTTON STYLES */
+    .btn {
+      padding: 0.61rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 0.9rem;
+    }
+
+    .btn-primary {
+      background-color: var(--accent-blue);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #2563eb;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-dark);
+    }
+
+    .btn-outline:hover {
+      background-color: #f1f5f9;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      color: #94a3b8;
+      max-width: 600px;
+      margin: 0 auto 1.8rem;
+    }
+
+    /* SCANNER PAGE SPECIFIC STYLES */
+    .scanner-card {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border);
+      padding: 2.5rem;
+    }
+
+    .upload-zone {
+      border: 2px dashed var(--accent-blue);
+      background-color: #eff6ff;
+      border-radius: 12px;
+      padding: 4rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .upload-zone.dragover {
+      background-color: #dbeafe;
+      border-color: var(--accent-cyan);
+    }
+
+    .upload-icon {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .file-preview-area {
+      display: none;
+      background-color: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .preview-content {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+    }
+
+    .preview-image-box {
+      width: 200px;
+      height: 200px;
+      background-color: #000;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .preview-image-box img, .preview-image-box canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .dual-images-container {
+      display: none;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .image-card {
+      flex: 1;
+      min-width: 200px;
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+      text-align: center;
+      padding-bottom: 0.5rem;
+    }
+
+    .image-card img, .image-card canvas {
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+    }
+
+    .image-card span {
+      display: block;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-top: 0.4rem;
+    }
+
+    .scan-results {
+      display: none;
+      background-color: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .loading-state {
+      display: none;
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+
+    .spinner {
+      width: 45px;
+      height: 45px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--accent-blue);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* TABLE SECTION */
+    .table-container {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    th {
+      background-color: #f8fafc;
+      padding: 1rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .status-tag {
+      padding: 0.2rem 0.6rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+
+    /* FOOTER */
+    footer {
+      background-color: var(--primary);
+      color: #94a3b8;
+      padding: 2.5rem 2rem 1.5rem;
+      margin-top: 4rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    @media (max-width: 850px) {
+      .login-wrapper {
+        grid-template-columns: 1fr;
+      }
+      .login-branding {
+        padding: 2.5rem 2rem;
+      }
+      .login-card {
+        padding: 2.5rem 2rem;
+      }
+      .results-grid, .preview-content {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+      }
+    }
+
+    /* PRINT FORMATTING FOR PDF DOWNLOAD GENERATION */
+    @media print {
+      body * { visibility: hidden; }
+      #printableArea, #printableArea * { visibility: visible; }
+      #printableArea { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ====================================================
+        1. SIH ATTRACTIVE AUTHENTICATION ENTRY PAGE
+  ==================================================== -->
+  <section id="loginPage">
+    <div class="medtech-grid"></div>
+    <div class="ecg-line"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="login-wrapper">
+      <!-- Left Branding Banner -->
+      <div class="login-branding">
+        <div class="sih-badge">SIH 2026 AI Innovation</div>
+        <div class="brand-title">
+          <h1>Smart Xray <span>Scan</span></h1>
+          <p>Next-Gen Chest Radiograph Diagnostics with Real-Time Deep Learning Analysis.</p>
+        </div>
+      </div>
+
+      <!-- Right Login Card -->
+      <div class="login-card">
+        <div class="auth-tabs">
+          <button class="auth-tab active" onclick="switchTab('doctor')">Doctor Portal</button>
+          <button class="auth-tab" onclick="switchTab('patient')">Patient Access</button>
+        </div>
+
+        <!-- DOCTOR LOGIN FORM -->
+        <form class="auth-form active" id="doctorForm" onsubmit="handleDoctorLogin(event)">
+          <div class="form-group">
+            <label for="docEmail">Doctor Credentials / Email</label>
+            <input type="email" id="docEmail" placeholder="dr.smith@hospital.com" required>
+          </div>
+          <div class="form-group">
+            <label for="docPassword">Security Password</label>
+            <input type="password" id="docPassword" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn-submit">Authenticate Dashboard &rarr;</button>
+        </form>
+
+        <!-- PATIENT ACCESS FORM -->
+        <form class="auth-form" id="patientForm" onsubmit="handlePatientLogin(event)">
+          <div class="form-group">
+            <label for="patientId">Patient ID (PID)</label>
+            <input type="text" id="patientId" placeholder="e.g. PAT-2026-8841" required>
+          </div>
+          <div class="form-group">
+            <label for="patientDob">Date of Birth</label>
+            <input type="date" id="patientDob" required>
+          </div>
+          <button type="submit" class="btn-submit">View Patient Records &rarr;</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ====================================================
+        2. MAIN APPLICATION DASHBOARD (MULTI-PAGE SYSTEM)
+  ==================================================== -->
+  <div id="dashboardPage">
+
+    <!-- HEADER / NAVIGATION -->
+    <header>
+      <nav>
+        <div class="logo" onclick="navigateTo('dashboardOverview')">
+          &#127973; Smart Xray <span>Scan</span>
+        </div>
+        <ul class="nav-links">
+          <li><a id="navHome" class="active" onclick="navigateTo('dashboardOverview')">Home Overview</a></li>
+          <li><a id="navUpload" onclick="navigateTo('uploadPage')">Upload Scan</a></li>
+          <li><a id="navRecords" onclick="navigateTo('dashboardOverview', 'records')">Scan Records</a></li>
+        </ul>
+        <div class="user-profile">
+          <span class="user-badge" id="roleBadge">Doctor</span>
+          <span id="userNameDisplay">user@hospital.com</span>
+          <button class="btn btn-outline" style="color: white; border-color: rgba(255,255,255,0.2); padding: 0.3rem 0.8rem;" onclick="logout()">Logout</button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- VIEW 1: HOME OVERVIEW PAGE -->
+    <div id="dashboardOverview" class="page-view active">
+      <section class="hero">
+        <h1>Early Diagnostic System Dashboard</h1>
+        <p>Access patient diagnostic metrics, execute new scans on a separate workflow page, or pull historical AI reports.</p>
+        <button class="btn btn-primary" onclick="navigateTo('uploadPage')">Go to Upload Scan Page &rarr;</button>
+      </section>
+
+      <div class="container" id="records">
+        <div class="section-title">
+          <h2>Recent Scan Log Records</h2>
+          <p>Real-time updates recorded from current and past AI diagnostic processing sessions</p>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Scan ID</th>
+                <th>File Name</th>
+                <th>Timestamp</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="logsTableBody">
+              <tr id="emptyRow">
+                <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                  No active scans recorded in this session yet. Go to "Upload Scan" to process an image.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: DEDICATED UPLOAD SCAN PAGE (RE-DIRECTED VIEW) -->
+    <div id="uploadPage" class="page-view">
+      <div class="container">
+        <div class="section-title">
+          <h2>Dedicated Image Processing Page</h2>
+          <p>Upload a new radiograph scan to run diagnostic AI detection models</p>
+        </div>
+
+        <div class="scanner-card">
+          <input type="file" id="fileInput" accept="image/*" style="display: none;">
+
+          <!-- Upload Drop Zone -->
+          <div class="upload-zone" id="dropZone">
+            <div class="upload-icon">&#128194;</div>
+            <h3>Drag & Drop Chest X-Ray File Here</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0.5rem 0 1rem;">Supports PNG, JPG, JPEG formats</p>
+            <button class="btn btn-outline" type="button" onclick="document.getElementById('fileInput').click()">Browse Local Files</button>
+          </div>
+
+          <!-- File Selected Preview Area -->
+          <div class="file-preview-area" id="previewArea">
+            <div class="preview-content">
+              <div class="preview-image-box" id="initialPreviewBox">
+                <img id="uploadedImage" src="" alt="Uploaded X-Ray">
+              </div>
+              <div>
+                <h3 id="fileNameDisplay" style="margin-bottom: 0.5rem;">file_name.png</h3>
+                <p id="fileSizeDisplay" style="color: var(--text-muted); margin-bottom: 1.5rem;">Size: -- KB</p>
+                <div style="display: flex; gap: 1rem;">
+                  <button class="btn btn-primary" id="startScanBtn">Execute AI Diagnosis</button>
+                  <button class="btn btn-outline" id="removeFileBtn">Remove</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Side-by-side Image Container after Analysis -->
+            <div class="dual-images-container" id="dualImagesContainer">
+              <div class="image-card">
+                <img id="originalXrayDisplay" src="" alt="Original Chest X-Ray">
+                <span>Original Radiograph</span>
+              </div>
+              <div class="image-card">
+                <canvas id="gradcamCanvas"></canvas>
+                <span>Grad-CAM Activation Map</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Processing State -->
+          <div class="loading-state" id="loadingState">
+            <div class="spinner"></div>
+            <p style="font-weight: 700; color: var(--primary);">Analyzing Chest Radiograph...</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Running neural inference pipeline & generating Grad-CAM heat-map</p>
+          </div>
+
+          <!-- Output Scan Results View -->
+          <div class="scan-results" id="scanResults">
+            <h3 style="margin-bottom: 1rem; color: var(--primary);">Diagnostic Output Results</h3>
+            <div class="results-grid">
+              <div>
+                <span class="status-tag" id="resultStatus">Waiting for Analysis</span>
+                <div style="margin-top: 1rem;">
+                  <label style="font-size: 0.8rem; color: var(--text-muted); display: block;">Source File</label>
+                  <strong id="resFileName">-</strong>
+                </div>
+                <div style="margin-top: 0.8rem;">
+                  <label style="font-size: 0.8rem; color: var(--text-muted); display: block;">Diagnostic Confidence</label>
+                  <strong id="resultConfidence" style="color: var(--danger); font-size: 1.2rem;">--%</strong>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; justify-content: flex-end; gap: 0.8rem;">
+                <button class="btn btn-primary" id="downloadPdfBtn">Generate PDF Report</button>
+                <button class="btn btn-outline" onclick="resetScanner()">Upload Another Scan</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HIDDEN PRINTABLE CONTAINER FOR PDF GENERATION -->
+    <div id="printableArea" style="display:none;"></div>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>&copy; 2026 Smart Xray Scan — Smart India Hackathon System Integration Dashboard</p>
+    </footer>
+
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // ACCESS CONTROL LOGIC
+    const loginPage = document.getElementById('loginPage');
+    const dashboardPage = document.getElementById('dashboardPage');
+    const doctorForm = document.getElementById('doctorForm');
+    const patientForm = document.getElementById('patientForm');
+    const userNameDisplay = document.getElementById('userNameDisplay');
+    const roleBadge = document.getElementById('roleBadge');
+
+    function switchTab(role) {
+      const tabs = document.querySelectorAll('.auth-tab');
+      tabs.forEach(tab => tab.classList.remove('active'));
+
+      if (role === 'doctor') {
+        tabs[0].classList.add('active');
+        doctorForm.classList.add('active');
+        patientForm.classList.remove('active');
+      } else {
+        tabs[1].classList.add('active');
+        patientForm.classList.add('active');
+        doctorForm.classList.remove('active');
+      }
+    }
+
+    function handleDoctorLogin(e) {
+      e.preventDefault();
+      enterDashboard('Doctor', document.getElementById('docEmail').value);
+    }
+
+    function handlePatientLogin(e) {
+      e.preventDefault();
+      enterDashboard('Patient', document.getElementById('patientId').value);
+    }
+
+    function enterDashboard(role, identifier) {
+      roleBadge.textContent = role;
+      userNameDisplay.textContent = identifier;
+      loginPage.style.display = 'none';
+      dashboardPage.style.display = 'block';
+      navigateTo('dashboardOverview');
+    }
+
+    function logout() {
+      doctorForm.reset();
+      patientForm.reset();
+      dashboardPage.style.display = 'none';
+      loginPage.style.display = 'flex';
+      resetScanner();
+    }
+
+    // PAGE-TO-PAGE REDIRECT NAVIGATION SYSTEM
+    function navigateTo(pageId, scrollTarget = null) {
+      document.querySelectorAll('.page-view').forEach(page => {
+        page.classList.remove('active');
+      });
+
+      document.getElementById('navHome').classList.remove('active');
+      document.getElementById('navUpload').classList.remove('active');
+
+      if (pageId === 'uploadPage') {
+        document.getElementById('navUpload').classList.add('active');
+      } else {
+        document.getElementById('navHome').classList.add('active');
+      }
+
+      const targetPage = document.getElementById(pageId);
+      if (targetPage) {
+        targetPage.classList.add('active');
+      }
+
+      if (scrollTarget) {
+        const el = document.getElementById(scrollTarget);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+
+    // FILE SCANNER & LOG PIPELINE
+    const fileInput = document.getElementById('fileInput');
+    const dropZone = document.getElementById('dropZone');
+    const previewArea = document.getElementById('previewArea');
+    const uploadedImage = document.getElementById('uploadedImage');
+    const originalXrayDisplay = document.getElementById('originalXrayDisplay');
+    const gradcamCanvas = document.getElementById('gradcamCanvas');
+    const initialPreviewBox = document.getElementById('initialPreviewBox');
+    const dualImagesContainer = document.getElementById('dualImagesContainer');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+    const fileSizeDisplay = document.getElementById('fileSizeDisplay');
+    
+    const startScanBtn = document.getElementById('startScanBtn');
+    const removeFileBtn = document.getElementById('removeFileBtn');
+    const loadingState = document.getElementById('loadingState');
+    const scanResults = document.getElementById('scanResults');
+    const resFileName = document.getElementById('resFileName');
+    const logsTableBody = document.getElementById('logsTableBody');
+    const emptyRow = document.getElementById('emptyRow');
+
+    let currentFile = null;
+
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) handleFileSelect(e.target.files[0]);
+    });
+
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      if (e.dataTransfer.files.length > 0) handleFileSelect(e.dataTransfer.files[0]);
+    });
+
+    function handleFileSelect(file) {
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file.');
+        return;
+      }
+
+      currentFile = file;
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        uploadedImage.src = e.target.result;
+        originalXrayDisplay.src = e.target.result;
+        fileNameDisplay.textContent = file.name;
+        fileSizeDisplay.textContent = `Size: ${(file.size / 1024).toFixed(1)} KB`;
+
+        dropZone.style.display = 'none';
+        previewArea.style.display = 'block';
+        initialPreviewBox.style.display = 'block';
+        dualImagesContainer.style.display = 'none';
+        scanResults.style.display = 'none';
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    removeFileBtn.addEventListener('click', resetScanner);
+
+    function resetScanner() {
+      currentFile = null;
+      fileInput.value = '';
+      dropZone.style.display = 'block';
+      previewArea.style.display = 'none';
+      initialPreviewBox.style.display = 'block';
+      dualImagesContainer.style.display = 'none';
+      loadingState.style.display = 'none';
+      scanResults.style.display = 'none';
+    }
+
+    // REAL AI INFERENCE + GRAD-CAM
+    let lastPrediction = "PNEUMONIA";
+    let lastConfidence = 0;
+
+    startScanBtn.addEventListener('click', async () => {
+      if (!currentFile) {
+        alert('Please select an X-ray first.');
+        return;
+      }
+
+      previewArea.style.display = 'none';
+      loadingState.style.display = 'block';
+      scanResults.style.display = 'none';
+
+      try {
+        const formData = new FormData();
+        formData.append('file', currentFile);
+
+        const response = await fetch('/analyze', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.detail || 'AI analysis failed.');
+        }
+
+        lastPrediction = data.prediction;
+        lastConfidence = Number(data.confidence);
+
+        loadingState.style.display = 'none';
+        previewArea.style.display = 'block';
+        initialPreviewBox.style.display = 'none';
+
+        // Original X-ray
+        originalXrayDisplay.src = uploadedImage.src;
+
+        // Real Grad-CAM returned by Python
+        const gradcamImage = new Image();
+
+        gradcamImage.onload = () => {
+          gradcamCanvas.width = gradcamImage.naturalWidth || uploadedImage.naturalWidth;
+          gradcamCanvas.height = gradcamImage.naturalHeight || uploadedImage.naturalHeight;
+
+          const ctx = gradcamCanvas.getContext('2d');
+          ctx.clearRect(0, 0, gradcamCanvas.width, gradcamCanvas.height);
+          ctx.drawImage(
+            gradcamImage,
+            0,
+            0,
+            gradcamCanvas.width,
+            gradcamCanvas.height
+          );
+        };
+
+        gradcamImage.src = 'data:image/jpeg;base64,' + data.gradcam;
+
+        dualImagesContainer.style.display = 'flex';
+        scanResults.style.display = 'block';
+        resFileName.textContent = currentFile.name;
+
+        const resultStatus = document.getElementById('resultStatus');
+        const resultConfidence = document.getElementById('resultConfidence');
+
+        if (data.prediction === 'PNEUMONIA') {
+          resultStatus.textContent = 'Pneumonia Detected';
+          resultStatus.style.backgroundColor = '#fee2e2';
+          resultStatus.style.color = '#991b1b';
+          resultConfidence.style.color = 'var(--danger)';
+        } else {
+          resultStatus.textContent = 'No Pneumonia Detected';
+          resultStatus.style.backgroundColor = '#dcfce7';
+          resultStatus.style.color = '#166534';
+          resultConfidence.style.color = '#166534';
+        }
+
+        resultConfidence.textContent = Number(data.confidence).toFixed(2) + '%';
+
+        addScanToHistory(currentFile.name);
+
+      } catch (error) {
+        console.error('AI analysis error:', error);
+
+        loadingState.style.display = 'none';
+        previewArea.style.display = 'block';
+        scanResults.style.display = 'none';
+
+        alert(
+          'AI analysis failed.\\n\\n' +
+          error.message +
+          '\\n\\nCheck the Uvicorn terminal for the exact error.'
+        );
+      }
+    });
+
+    function addScanToHistory(fileName) {
+      if (emptyRow) emptyRow.style.display = 'none';
+
+      const newRow = document.createElement('tr');
+      const scanID = '#SCN-' + Math.floor(1000 + Math.random() * 9000);
+      const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      newRow.innerHTML = `
+        <td><strong>${scanID}</strong></td>
+        <td>${fileName}</td>
+        <td>${currentTime}</td>
+        <td><span class="status-tag">Completed</span></td>
+        <td><a href="javascript:void(0)" onclick="triggerPdfExport('${scanID}', '${fileName}', '${currentTime}')" style="color: var(--accent-blue);">Download Report</a></td>
+      `;
+
+      logsTableBody.prepend(newRow);
+    }
+
+    // FUNCTIONAL PDF REPORT DOWNLOAD GENERATOR (EXCLUSIVELY GRAD-CAM DISPLAY)
+    function triggerPdfExport(scanId = '#SCN-8841', fileName = resFileName.textContent, time = new Date().toLocaleTimeString()) {
+      const printableArea = document.getElementById('printableArea');
+      
+      // Explicitly capture data from canvas element
+      const gradcamImgData = gradcamCanvas.toDataURL('image/png');
+
+      printableArea.innerHTML = `
+        <div style="font-family: Arial, sans-serif; padding: 25px; color: #0a0f1d; border: 2px solid #3b82f6; border-radius: 10px; max-width: 800px; margin: 0 auto;">
+          <h2 style="color: #0a0f1d; border-bottom: 2px solid #06b6d4; padding-bottom: 8px; margin-bottom: 20px;">
+            Smart Xray Scan — Diagnostic AI Report
+          </h2>
+          
+          <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 0.95rem; line-height: 1.6;">
+            <div>
+              <p><strong>Scan ID:</strong> ${scanId}</p>
+              <p><strong>File Name:</strong> ${fileName}</p>
+              <p><strong>Timestamp:</strong> ${time}</p>
+              <p><strong>Evaluator:</strong> ${userNameDisplay.textContent} (${roleBadge.textContent})</p>
+            </div>
+            <div style="text-align: right; background-color: #fef2f2; padding: 10px 15px; border-radius: 8px; border: 1px solid #fecaca;">
+              <h3 style="color: #dc2626; margin-bottom: 3px;">${lastPrediction === "PNEUMONIA" ? "Pneumonia Detected" : "No Pneumonia Detected"}</h3>
+              <p style="color: #991b1b; font-weight: bold;">Confidence: ${Number(lastConfidence).toFixed(2)}%</p>
+            </div>
+          </div>
+
+          <hr style="margin: 20px 0; border: 0; border-top: 1px solid #e2e8f0;">
+
+          <h3 style="margin-bottom: 12px; color: #0a0f1d; text-align: center;">Grad-CAM Deep Learning Region Map</h3>
+          
+          <div style="text-align: center; margin-bottom: 25px; background: #0f172a; padding: 15px; border-radius: 8px;">
+            <img src="${gradcamImgData}" style="max-width: 100%; max-height: 320px; object-fit: contain; border-radius: 4px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+            <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 8px; font-weight: bold;">Neural Network Attention Activation Heatmap</p>
+          </div>
+
+          <h3 style="margin-bottom: 8px; color: #0a0f1d;">Diagnostic Interpretation</h3>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: #334155; background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
+            The Grad-CAM diagnostic visualization highlights concentrated neural network attention over localized parenchymal densities. The prominent activation region in the lower pulmonary field reflects a high-probability region for consolidative infiltrate typical of bacterial or viral pulmonary infection. Clinical correlation with blood markers and patient physical examination is recommended.
+          </p>
+
+          <div style="margin-top: 30px; font-size: 0.8rem; color: #64748b; border-top: 1px dashed #cbd5e1; padding-top: 12px; text-align: center;">
+            * Generated automatically via Smart Xray Scan Medical Portal — Smart India Hackathon System Integration
+          </div>
+        </div>
+      `;
+
+      printableArea.style.display = 'block';
+      window.print();
+      printableArea.style.display = 'none';
+    }
+
+    document.getElementById('downloadPdfBtn').addEventListener('click', () => {
+      triggerPdfExport();
+    });
+  </script>
+</body>
+</html>
