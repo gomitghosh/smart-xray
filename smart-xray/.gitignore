@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Runtime artifacts generated at request time (keep the folders + .gitkeep)
+backend/uploads/*
+!backend/uploads/.gitkeep
+backend/results/original/*
+!backend/results/original/.gitkeep
+backend/results/heatmap/*
+!backend/results/heatmap/.gitkeep
+backend/results/*.json
